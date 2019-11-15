@@ -42,7 +42,7 @@ public class InitBean {
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) {
 
-        readTeamsAndDriversFromFile(TEAM_FILE_NAME);
+        //readTeamsAndDriversFromFile(TEAM_FILE_NAME);
         //readRacesFromFile(RACES_FILE_NAME);
         client.readResultsFromEndpoint();
 
@@ -66,6 +66,8 @@ public class InitBean {
                 race.setId(Long.valueOf(rowCells[0]));
                 race.setCountry(rowCells[1]);
                 race.setDate(LocalDate.parse(rowCells[2], formatter));
+
+                System.out.println(race);
 
                 em.persist(race);
             }
