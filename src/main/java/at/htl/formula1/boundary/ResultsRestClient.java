@@ -4,6 +4,7 @@ import at.htl.formula1.entity.Driver;
 import at.htl.formula1.entity.Race;
 import at.htl.formula1.entity.Result;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonValue;
@@ -15,13 +16,21 @@ import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Stream;
 
+@ApplicationScoped
+@Transactional
 public class ResultsRestClient {
 
 
     public static final String RESULTS_ENDPOINT = "http://vm90.htl-leonding.ac.at/results";
     private Client client;
     private WebTarget target;
+
+    @PersistenceContext
+    EntityManager em;
 
     /**
      * Vom RestEndpoint werden alle Result abgeholt und in ein JsonArray gespeichert.
@@ -57,11 +66,30 @@ public class ResultsRestClient {
      *
      * @param resultsJson
      */
-    @Transactional
     void persistResult(JsonArray resultsJson) {
         for (JsonValue value:resultsJson) {
             JsonObject object = value.asJsonObject();
-            //System.out.println(object);
+
+            String driverName = object.get("driverFullName").toString();
+
+//            Driver currentDriver = this.em
+//                    .createNamedQuery("Driver.findByName", Driver.class)
+//                    .setParameter("NAME", driverName)
+//                    .getSingleResult();
+//            System.out.println(currentDriver);
+//
+//            System.out.println(currentDriver);
+//
+//            /*String raceId = object.get("raceNo").toString();
+//            int raceNumber = Integer.parseInt(raceId);
+//
+//            //Race currentRace = this.em.createNamedQuery("Race.findById", Race.class).setParameter("ID", raceNumber).getSingleResult();
+//
+//            String currentPosition = object.get("driverFullName").toString();
+//            int currentPos = Integer.parseInt(currentPosition);
+//
+//            //this.em.persist(new Result(currentRace, currentPos ,currentDriver));
+//            //System.out.println(object);*/
         }
     }
 
