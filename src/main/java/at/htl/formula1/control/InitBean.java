@@ -44,8 +44,8 @@ public class InitBean {
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) {
 
         readTeamsAndDriversFromFile(TEAM_FILE_NAME);
-        //readRacesFromFile(RACES_FILE_NAME);
-        //client.readResultsFromEndpoint();
+        readRacesFromFile(RACES_FILE_NAME);
+        client.readResultsFromEndpoint();
 
     }
 
