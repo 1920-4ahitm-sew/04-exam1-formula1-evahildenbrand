@@ -10,6 +10,7 @@ import javax.json.JsonObject;
 import javax.json.JsonValue;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -70,32 +71,34 @@ public class ResultsRestClient {
         for (JsonValue value:resultsJson) {
             JsonObject object = value.asJsonObject();
 
-            String driverName = object.get("driverFullName").toString();
+            //String driverName = object.get("driverFullName").toString();
+            String driverName = object.getString("driverFullName");
 
-//            Driver currentDriver = this.em
-//                    .createNamedQuery("Driver.findByName", Driver.class)
-//                    .setParameter("NAME", driverName)
-//                    .getSingleResult();
-//            System.out.println(currentDriver);
-//
-//            System.out.println(currentDriver);
-//
-//            /*String raceId = object.get("raceNo").toString();
-//            int raceNumber = Integer.parseInt(raceId);
-//
-//            Race currentRace = this.em.createNamedQuery("Race.findById", Race.class).setParameter("ID", raceNumber).getSingleResult();
-//
-//            String currentPosition = object.get("driverFullName").toString();
-//            int currentPos = Integer.parseInt(currentPosition);
-//
-//              Result currentResult = new Result();
-//              currentResult.setRace(currentRace);
-//              currentResult.setPosition(currentPos);
-//              currentResult.setDriver(currentDriver);
-//              currentResult.setPoints(currentPos);
-//
-//            //this.em.persist(currentResult);
-//            //System.out.println(object);*/
+            TypedQuery<Driver> query = em
+                    .createNamedQuery("Driver.findByName", Driver.class)
+                    .setParameter("NAME", driverName);
+
+              Driver currentDriver = query.getSingleResult();
+            System.out.println(currentDriver);
+
+            System.out.println(currentDriver);
+
+            String raceId = object.get("raceNo").toString();
+            int raceNumber = Integer.parseInt(raceId);
+
+            Race currentRace = this.em.createNamedQuery("Race.findById", Race.class).setParameter("ID", raceNumber).getSingleResult();
+
+            String currentPosition = object.get("driverFullName").toString();
+            int currentPos = Integer.parseInt(currentPosition);
+
+              Result currentResult = new Result();
+              currentResult.setRace(currentRace);
+              currentResult.setPosition(currentPos);
+              currentResult.setDriver(currentDriver);
+              currentResult.setPoints(currentPos);
+
+            this.em.persist(currentResult);
+            System.out.println(object);
         }
     }
 
