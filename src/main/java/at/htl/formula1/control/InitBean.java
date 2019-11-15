@@ -37,13 +37,13 @@ public class InitBean {
     @Inject
     ResultsRestClient client;
 
-    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) {
 
-        //readTeamsAndDriversFromFile(TEAM_FILE_NAME);
-        readRacesFromFile(RACES_FILE_NAME);
+        readTeamsAndDriversFromFile(TEAM_FILE_NAME);
+        //readRacesFromFile(RACES_FILE_NAME);
         client.readResultsFromEndpoint();
 
     }
@@ -65,7 +65,7 @@ public class InitBean {
 
                 race.setId(Long.valueOf(rowCells[0]));
                 race.setCountry(rowCells[1]);
-                race.setDate(LocalDate.parse(rowCells[2]));
+                race.setDate(LocalDate.parse(rowCells[2], formatter));
 
                 em.persist(race);
             }
@@ -84,7 +84,7 @@ public class InitBean {
      */
     private void readTeamsAndDriversFromFile(String teamFileName) {
         try{
-            BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(teamFileName)));
+            BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/" + teamFileName)));
             br.readLine();
             String line;
             while ((line = br.readLine()) != null){
@@ -110,6 +110,18 @@ public class InitBean {
 
     private void persistTeamAndDrivers(String[] line) {
         List<Team> teams = this.em.createNamedQuery("Team.findByName", Team.class).setParameter("NAME", line[0]).getResultList();
+
+        Team currentTeam = null;
+
+        if(teams.size() != 1){
+            currentTeam = new Team(line[0]);
+            em.persist(currentTeam);
+        }else{
+            currentTeam = teams.get(0);
+        }
+
+        this.em.persist(new Driver(line[1], currentTeam));
+        this.em.persist(new Driver(line[2], currentTeam));
     }
 
 
