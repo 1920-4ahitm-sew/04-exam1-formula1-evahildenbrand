@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.stream.Stream;
 
 @ApplicationScoped
@@ -59,7 +60,7 @@ public class InitBean {
                 String[] rowCells = line.split(";");
 
                 Race race = new Race();
-                
+
                 race.setId(Long.valueOf(rowCells[0]));
                 race.setCountry(rowCells[1]);
                 race.setDate(LocalDate.parse(rowCells[2]));
@@ -80,7 +81,18 @@ public class InitBean {
      * @param teamFileName
      */
     private void readTeamsAndDriversFromFile(String teamFileName) {
+        try{
+            BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(teamFileName)));
+            br.readLine();
+            String line;
+            while ((line = br.readLine()) != null){
+                String[] rowCells = line.split(";");
 
+                persistTeamAndDrivers(rowCells);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
