@@ -45,6 +45,8 @@ public class InitBean {
 
         readTeamsAndDriversFromFile(TEAM_FILE_NAME);
         readRacesFromFile(RACES_FILE_NAME);
+        System.out.println("----------------------------------------------------------------");
+
         client.readResultsFromEndpoint();
 
     }
