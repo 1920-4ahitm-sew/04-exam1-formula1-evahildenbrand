@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @ApplicationScoped
+@Transactional
 public class InitBean {
 
     private static final String TEAM_FILE_NAME = "teams.csv";
@@ -42,9 +43,9 @@ public class InitBean {
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) {
 
-        //readTeamsAndDriversFromFile(TEAM_FILE_NAME);
+        readTeamsAndDriversFromFile(TEAM_FILE_NAME);
         //readRacesFromFile(RACES_FILE_NAME);
-        client.readResultsFromEndpoint();
+        //client.readResultsFromEndpoint();
 
     }
 
@@ -84,6 +85,7 @@ public class InitBean {
      *
      * @param teamFileName
      */
+    @Transactional
     private void readTeamsAndDriversFromFile(String teamFileName) {
         try{
             BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/" + teamFileName)));
@@ -109,7 +111,7 @@ public class InitBean {
      *
      * @param line String-Array mit den einzelnen Werten der csv-Datei
      */
-
+    @Transactional
     private void persistTeamAndDrivers(String[] line) {
         List<Team> teams = this.em.createNamedQuery("Team.findByName", Team.class).setParameter("NAME", line[0]).getResultList();
 
