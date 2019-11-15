@@ -28,8 +28,12 @@ public class ResultsRestClient {
      * Dieses JsonArray wird an die Methode persistResult(...) übergeben
      */
     public void readResultsFromEndpoint() {
+        this.client = ClientBuilder.newClient();
+        this.target = client.target(RESULTS_ENDPOINT);
 
-        JsonArray payload = null;
+        Response response = target.request().get();
+
+        JsonArray payload = response.readEntity(JsonArray.class);
 
         persistResult(payload);
     }
@@ -55,7 +59,10 @@ public class ResultsRestClient {
      */
     @Transactional
     void persistResult(JsonArray resultsJson) {
-
+        for (JsonValue value:resultsJson) {
+            JsonObject object = value.asJsonObject();
+            //System.out.println(object);
+        }
     }
 
 }
