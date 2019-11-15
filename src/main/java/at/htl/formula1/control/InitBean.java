@@ -37,10 +37,12 @@ public class InitBean {
     @Inject
     ResultsRestClient client;
 
+    DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+
 
     public void init(@Observes @Initialized(ApplicationScoped.class) Object init) {
 
-        readTeamsAndDriversFromFile(TEAM_FILE_NAME);
+        //readTeamsAndDriversFromFile(TEAM_FILE_NAME);
         readRacesFromFile(RACES_FILE_NAME);
         client.readResultsFromEndpoint();
 
@@ -53,7 +55,7 @@ public class InitBean {
      */
     private void readRacesFromFile(String racesFileName) {
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(racesFileName)));
+            BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/" + racesFileName)));
             br.readLine();
             String line;
             while((line = br.readLine()) != null){
@@ -107,7 +109,7 @@ public class InitBean {
      */
 
     private void persistTeamAndDrivers(String[] line) {
-
+        List<Team> teams = this.em.createNamedQuery("Team.findByName", Team.class).setParameter("NAME", line[0]).getResultList();
     }
 
 
