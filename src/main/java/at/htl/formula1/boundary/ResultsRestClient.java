@@ -83,12 +83,18 @@ public class ResultsRestClient {
 //            /*String raceId = object.get("raceNo").toString();
 //            int raceNumber = Integer.parseInt(raceId);
 //
-//            //Race currentRace = this.em.createNamedQuery("Race.findById", Race.class).setParameter("ID", raceNumber).getSingleResult();
+//            Race currentRace = this.em.createNamedQuery("Race.findById", Race.class).setParameter("ID", raceNumber).getSingleResult();
 //
 //            String currentPosition = object.get("driverFullName").toString();
 //            int currentPos = Integer.parseInt(currentPosition);
 //
-//            //this.em.persist(new Result(currentRace, currentPos ,currentDriver));
+//              Result currentResult = new Result();
+//              currentResult.setRace(currentRace);
+//              currentResult.setPosition(currentPos);
+//              currentResult.setDriver(currentDriver);
+//              currentResult.setPoints(currentPos);
+//
+//            //this.em.persist(currentResult);
 //            //System.out.println(object);*/
         }
     }
