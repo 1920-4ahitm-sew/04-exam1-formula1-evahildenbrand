@@ -78,10 +78,13 @@ public class ResultsRestClient {
                     .createNamedQuery("Driver.findByName", Driver.class)
                     .setParameter("NAME", driverName);
 
-              Driver currentDriver = query.getSingleResult();
-            System.out.println(currentDriver);
+            //Driver currentDriver = query.getSingleResult();
+            //System.out.println(currentDriver);
 
-            System.out.println(currentDriver);
+            List<Driver> drivers = query.getResultList();
+            if (drivers.size() >= 1) {
+                Driver currentDriver = drivers.get(0);
+                System.out.println(currentDriver);
 
 //            String raceId = object.get("raceNo").toString();
 //            int raceNumber = Integer.parseInt(raceId);
@@ -99,6 +102,7 @@ public class ResultsRestClient {
 //
 //            this.em.persist(currentResult);
 //            System.out.println(object);
+            }
         }
     }
 
