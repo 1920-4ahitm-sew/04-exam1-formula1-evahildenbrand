@@ -86,11 +86,17 @@ public class ResultsRestClient {
                 Driver currentDriver = drivers.get(0);
                 System.out.println(currentDriver);
 
-//            String raceId = object.get("raceNo").toString();
-//            int raceNumber = Integer.parseInt(raceId);
-//
-//            Race currentRace = this.em.createNamedQuery("Race.findById", Race.class).setParameter("ID", raceNumber).getSingleResult();
-//
+                //String raceId = object.get("raceNo").toString();
+                //int raceNumber = Integer.parseInt(raceId);
+
+                int raceId = object.getInt("raceNo");
+                long raceNumber = (long) raceId;
+
+                Race currentRace = this.em
+                        .createNamedQuery("Race.findById", Race.class)
+                        .setParameter("ID", raceNumber)
+                        .getSingleResult();
+
 //            String currentPosition = object.get("driverFullName").toString();
 //            int currentPos = Integer.parseInt(currentPosition);
 //
