@@ -1,0 +1,36 @@
+# Testverbesserung
+
+-- fehlerhafter Code
+-- Probleme
+-- korrigierter Code
+
+#### ResultsRestClient.java
+###### Definieren des aktuellen Rennfahrers:
+  * Alter Code
+
+[source,java]
+----
+    Driver currentDriver = query.getSingleResult();
+    System.out.println(currentDriver);
+----
+
+  * Probleme mit dem alten Code:
+    ** Mit diesem Code bekomme ich immer einen "no entity found for query" - Error
+
+  * Lösung des Problems => korrigierter Code
+    ** Das if-Statement wird dazu gebraucht, um zu überprüfen,
+       ob der aktuelle Fahrer auch in der Datenbank gespeichert ist.
+       Ist er ein, oder auch mehrmals in der Datenbank gespeichert,
+       so wird der erste Eintrag in der Liste verwendet
+
+[source,java]
+----
+    List<Driver> drivers = query.getResultList();
+    if (drivers.size() >= 1){
+        Driver currentDriver = drivers.get(0);
+        System.out.println(currentDriver);
+        ...
+    }
+----
+
+
