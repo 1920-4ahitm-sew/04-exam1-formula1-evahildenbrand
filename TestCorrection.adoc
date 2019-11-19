@@ -33,4 +33,32 @@
     }
 ----
 
+###### Definition des aktuellen Rennens:
+  * Alter Code:
+[source,java]
+----
+    //String raceId = object.get("raceNo").toString();
+    //int raceNumber = Integer.parseInt(raceId);
+    //Race currentRace = this.em.createNamedQuery("Race.findById", Race.class).setParameter("ID", raceNumber).getSingleResult();
+----
+
+  * Probleme mit dem alten Code:
+    ** Der Code konnte nicht funktionieren, da er auskommentiert war.
+    ** Der definierte String ist kein "richtiger" String und funktioniert beim Übergeben nicht.
+    ** Der String wird zwar mit Integer.parseInt(raceId) in einen int umgewandelt,
+       jedoch ist die ID des Rennens ein long und kein int und so kann die query nicht funktionieren.
+
+  * Neuer Code:
+    ** Es gibt die Funktion .getInt und so kann ich gleich einen int vom JsonObject lesen
+       und diesen dann als long kasten.
+[source,java]
+----
+    int raceId = object.getInt("raceNo");
+    long raceNumber = (long) raceId;
+    Race currentRace = this.em
+        .createNamedQuery("Race.findById", Race.class)
+        .setParameter("ID", raceNumber)
+        .getSingleResult();
+----
+
 
