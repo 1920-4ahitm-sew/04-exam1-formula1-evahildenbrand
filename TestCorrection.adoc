@@ -61,4 +61,45 @@
         .getSingleResult();
 ----
 
+###### Definition der aktuellen Position, erstellen des Results und in DB speichern
+
+  * Alter Code
+[source,java]
+----
+//            String currentPosition = object.get("driverFullName").toString();
+//            int currentPos = Integer.parseInt(currentPosition);
+//
+//              Result currentResult = new Result();
+//              currentResult.setRace(currentRace);
+//              currentResult.setPosition(currentPos);
+//              currentResult.setDriver(currentDriver);
+//              currentResult.setPoints(currentPos);
+//
+//            this.em.persist(currentResult);
+//            System.out.println(object);
+----
+
+* Probleme mit dem alten Code
+    ** Da der Code auskommentiert war, konnte er nicht funktionieren.
+    ** Der String namens currentPosition gibt den aktuellen Fahrer aus und
+       kann daher auch nicht in einen int geparst werden.
+    ** Die aktuelle Position kann nicht als Position des aktuellen Results gesetzt werden,
+       da ein int erwartet wird und auch schon ein Fehler beim Parsen geworfen wird.
+    ** Auch die Punkte können nicht im aktuellen Result gesetzt werden,
+       da eben currentPos nicht verwendet werden kann. Außerdem sind es auch nicht die Punkte für den aktuellen Platz.
+
+* Neuer Code
+[source,java]
+----
+    int currentPosition = object.getInt("position");
+    Result currentResult = new Result();
+    currentResult.setRace(currentRace);
+    currentResult.setPosition(currentPosition);
+    currentResult.setDriver(currentDriver);
+    int currentPoints = currentResult.pointsPerPosition[currentPosition];
+    currentResult.setPoints(currentPoints);
+    this.em.persist(currentResult);
+    System.out.println(object);
+----
+
 
