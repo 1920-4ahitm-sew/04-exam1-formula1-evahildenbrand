@@ -99,16 +99,27 @@ public class ResultsRestClient {
 
 //            String currentPosition = object.get("driverFullName").toString();
 //            int currentPos = Integer.parseInt(currentPosition);
-//
-//              Result currentResult = new Result();
-//              currentResult.setRace(currentRace);
+
+                int currentPosition = object.getInt("position");
+
+                Result currentResult = new Result();
+                currentResult.setRace(currentRace);
+
 //              currentResult.setPosition(currentPos);
-//              currentResult.setDriver(currentDriver);
+
+                currentResult.setPosition(currentPosition);
+                currentResult.setDriver(currentDriver);
+
+                int currentPoints = currentResult.pointsPerPosition[currentPosition];
+
 //              currentResult.setPoints(currentPos);
-//
-//            this.em.persist(currentResult);
-//            System.out.println(object);
+
+                currentResult.setPoints(currentPoints);
+
+                this.em.persist(currentResult);
+                System.out.println(object);
             }
+
         }
     }
 
