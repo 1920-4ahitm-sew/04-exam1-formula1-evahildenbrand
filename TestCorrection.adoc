@@ -107,6 +107,19 @@
 ----
 
 ### Aufgabe 3: Gesamtpunkte eines Fahrers
+
+* Result:
+  ** Erstellung einer NamedQuery, zum Auslesen der Gesamtpunkte eines bestimmten Fahrers.
+[source,java]
+----
+    @NamedQueries({
+            @NamedQuery(
+                    name = "Result.getPointSumofDriver",
+                    query = "select sum(r.points) from Result r where r.driver = :DRIVER"
+            )
+    })
+----
+
 ### Aufgabe 4: Sieger eines bestimmten Rennens
 ### Aufgabe 5: Liste der Rennen, die ein Team gewonnen hat
 ### Aufgabe 6(für Spezialisten): Liste aller Fahrer mit ihren Punkten
