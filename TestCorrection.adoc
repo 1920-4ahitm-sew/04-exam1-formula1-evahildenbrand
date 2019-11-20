@@ -4,6 +4,10 @@
 -- Probleme
 -- korrigierter Code
 
+### Aufgabe 1: Import CSV
+
+### Aufgabe 2: Import Rest
+
 #### ResultsRestClient.java
 ###### Definieren des aktuellen Rennfahrers:
   * Alter Code
@@ -102,4 +106,8 @@
     System.out.println(object);
 ----
 
+### Aufgabe 3: Gesamtpunkte eines Fahrers
+### Aufgabe 4: Sieger eines bestimmten Rennens
+### Aufgabe 5: Liste der Rennen, die ein Team gewonnen hat
+### Aufgabe 6(für Spezialisten): Liste aller Fahrer mit ihren Punkten
 
