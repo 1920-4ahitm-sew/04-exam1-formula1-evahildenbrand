@@ -12,7 +12,12 @@ import javax.persistence.*;
 @NamedQueries({
         @NamedQuery(
                 name = "Driver.findByName",
-                query = "select d from Driver d where d.name = :NAME")
+                query = "select d from Driver d where d.name = :NAME"
+        ),
+        @NamedQuery(
+                name = "Driver.findByTeam",
+                query = "select d from Driver d where d.team = :TEAM"
+        )
 })
 public class Driver {
     @Id
