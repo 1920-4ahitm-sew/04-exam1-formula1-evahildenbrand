@@ -17,6 +17,10 @@ import javax.persistence.*;
         @NamedQuery(
                 name = "Result.getWinner",
                 query = "select r.driver from Result r where r.race = :RACE and r.position = 1"
+        ),
+        @NamedQuery(
+                name = "Result.getWonRacesOfTeam",
+                query = "select r.race from Result r where r.driver = :DRIVER and r.position = 1"
         )
 })
 public class Result {
