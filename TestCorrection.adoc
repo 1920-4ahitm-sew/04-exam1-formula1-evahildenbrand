@@ -120,6 +120,53 @@
     })
 ----
 
+* ResultsEndpoint
+  ** Alter Code:
+[source,java]
+----
+    @GET
+    @Path("name")
+    @Produces(MediaType.APPLICATION_JSON)
+    public JsonObject getPointsSumOfDriver(@QueryParam("name") String name) {
+        TypedQuery<Driver> query = em.createNamedQuery("Driver.findByName", Driver.class).setParameter("NAME", name);
+
+        Driver driver = query.getSingleResult();
+
+        return null;
+    }
+----
+
+  ** Probleme mit dem alten Code:
+    *** Der Code war noch nicht fertig programmiert.
+    *** Die Methode gab null und kein Ergebnis zurück.
+
+  ** Korrigierter Code:
+    *** Zuerst hole ich mir den eingegebenen Fahrer von der Datenbank.
+    *** Anschließend wird zu diesem Fahrer die Gesamtpunkteanzahl der Rennen ermittelt.
+    *** Dann wird ein JsonObjectBuilder erstellt, dem der Fahrer und die Punkteanzahl hinzugefügt werden.
+    *** Als Rückgabewert wird der JsonObjectBuilder gebaut.
+[source,java]
+----
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public JsonObject getPointsSumOfDriver(@QueryParam("name") String name) {
+        TypedQuery<Driver> query = em.createNamedQuery("Driver.findByName", Driver.class).setParameter("NAME", name);
+
+        Driver driver = query.getSingleResult();
+
+        long sumPoints = em
+                .createNamedQuery("Result.getPointSumofDriver", Long.class)
+                .setParameter("DRIVER", driver)
+                .getSingleResult();
+
+        JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+        jsonObjectBuilder.add("driver", driver.getName());
+        jsonObjectBuilder.add("points", sumPoints);
+
+        return jsonObjectBuilder.build();
+    }
+----
+
 ### Aufgabe 4: Sieger eines bestimmten Rennens
 ### Aufgabe 5: Liste der Rennen, die ein Team gewonnen hat
 ### Aufgabe 6(für Spezialisten): Liste aller Fahrer mit ihren Punkten
