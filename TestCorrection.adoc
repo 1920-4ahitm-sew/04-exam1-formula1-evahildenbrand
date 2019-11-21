@@ -1,10 +1,28 @@
 # Testverbesserung
 
--- fehlerhafter Code
--- Probleme
--- korrigierter Code
-
 ### Aufgabe 1: Import CSV
+
+* InitBean.java:
+  ** Alter Code:
+     *** Die folgende Codezeile wurde sowohl in der readTeamsAndDriversFromFile(TEAM_FILE_NAME)-Methode,
+         als auch in der readRacesFromFile(RACES_FILE_NAME)-Methode abgeändert
+[source,java]
+----
+    BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/" + fileName)));
+----
+
+  ** Probleme mit dem Code:
+     *** Oft kann es passieren wenn kein Charset (UTF-8) angegeben wird,
+         dass beim Ausführen des Codes ein Fehler, so wie zum Beispiel eine StartException kommt
+         und das Programm so auch nicht kompillierbar ist.
+
+  ** Korrigierter Code:
+     *** Diesen Fehler habe ich in der readTeamsAndDriversFromFile(TEAM_FILE_NAME) und
+         der readRacesFromFile(RACES_FILE_NAME)-Methode behoben.
+[source,java]
+----
+    BufferedReader br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("/" + teamFileName), StandardCharsets.UTF_8));
+----
 
 ### Aufgabe 2: Import Rest
 
