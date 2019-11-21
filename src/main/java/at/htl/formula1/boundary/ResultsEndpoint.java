@@ -103,4 +103,15 @@ public class ResultsEndpoint {
         return wonRaces;
     }
 
+    @GET
+    @Path("all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Object[]> allDriversWithPoints(){
+        List<Object[]> allDriversAndPoints = em
+                .createNamedQuery("Result.getAllDriversWithPoints", Object[].class)
+                .getResultList();
+
+        return allDriversAndPoints;
+    }
+
 }
