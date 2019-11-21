@@ -13,6 +13,10 @@ import javax.persistence.*;
         @NamedQuery(
                 name = "Result.getPointSumofDriver",
                 query = "select sum(r.points) from Result r where r.driver = :DRIVER"
+        ),
+        @NamedQuery(
+                name = "Result.getWinner",
+                query = "select r.driver from Result r where r.race = :RACE and r.position = 1"
         )
 })
 public class Result {
