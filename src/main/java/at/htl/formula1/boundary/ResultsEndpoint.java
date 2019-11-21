@@ -1,6 +1,7 @@
 package at.htl.formula1.boundary;
 
 import at.htl.formula1.entity.Driver;
+import at.htl.formula1.entity.Race;
 import at.htl.formula1.entity.Result;
 
 import javax.json.Json;
@@ -47,11 +48,24 @@ public class ResultsEndpoint {
     }
 
     /**
-     * @param id des Rennens
+     * @param country des Rennens
      * @return
      */
-    public Response findWinnerOfRace(long id) {
-        return null;
+    @GET
+    @Path("winner/{country}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findWinnerOfRace(@PathParam("country") String country) {
+        Race race = em
+                .createNamedQuery("Race.findByCountry", Race.class)
+                .setParameter("COUNTRY", country)
+                .getSingleResult();
+
+        Driver winner = em
+                .createNamedQuery("Result.getWinner", Driver.class)
+                .setParameter("RACE", race)
+                .getSingleResult();
+
+        return Response.ok(winner).build();
     }
 
 
