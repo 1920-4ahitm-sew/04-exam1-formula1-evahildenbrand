@@ -276,4 +276,34 @@
 ----
 
 ### Aufgabe 6(für Spezialisten): Liste aller Fahrer mit ihren Punkten
+* Result.java:
+  ** Um eine Liste aller Fahrer mit ihren Punkten auszugeben,
+     benötige ich eine NamedQuery,
+     welche mir den Fahrernamen und die Summe seiner Punkte ausgibt.
+[source,java]
+----
+    @NamedQuery(
+        name = "Result.getAllDriversWithPoints",
+        query = "select r.driver.name, sum(r.points) from Result r group by r.driver.name"
+    )
+----
+
+* ResultsEndpoint.java:
+  ** Um eine Liste aller Fahrer mit ihren Punkten auszugeben,
+     erstelle ich eine Liste von einem Array von Object,
+     in welche ich das Ergebnis der NamedQuery schreibe.
+  ** Dieses Ergebnis wird schließlich ausgegeben.
+[source,java]
+----
+    @GET
+    @Path("all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Object[]> allDriversWithPoints(){
+        List<Object[]> allDriversAndPoints = em
+                .createNamedQuery("Result.getAllDriversWithPoints", Object[].class)
+                .getResultList();
+
+        return allDriversAndPoints;
+    }
+----
 
