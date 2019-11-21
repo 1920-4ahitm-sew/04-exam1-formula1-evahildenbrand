@@ -5,6 +5,7 @@ import at.htl.formula1.entity.Result;
 
 import javax.json.Json;
 import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -15,6 +16,7 @@ import javax.ws.rs.core.Response;
 import java.util.List;
 
 @Transactional
+@Path("results")
 public class ResultsEndpoint {
 
     @PersistenceContext
@@ -26,14 +28,22 @@ public class ResultsEndpoint {
      * @return JsonObject
      */
     @GET
-    @Path("name")
     @Produces(MediaType.APPLICATION_JSON)
     public JsonObject getPointsSumOfDriver(@QueryParam("name") String name) {
         TypedQuery<Driver> query = em.createNamedQuery("Driver.findByName", Driver.class).setParameter("NAME", name);
 
         Driver driver = query.getSingleResult();
 
-        return null;
+        long sumPoints = em
+                .createNamedQuery("Result.getPointSumofDriver", Long.class)
+                .setParameter("DRIVER", driver)
+                .getSingleResult();
+
+        JsonObjectBuilder jsonObjectBuilder = Json.createObjectBuilder();
+        jsonObjectBuilder.add("driver", driver.getName());
+        jsonObjectBuilder.add("points", sumPoints);
+
+        return jsonObjectBuilder.build();
     }
 
     /**
