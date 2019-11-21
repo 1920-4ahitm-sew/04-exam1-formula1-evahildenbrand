@@ -168,6 +168,43 @@
 ----
 
 ### Aufgabe 4: Sieger eines bestimmten Rennens
+
+* Result.java:
+  ** Um den Sieger eines bestimmten Rennens zu bestimmen,
+     benötige ich eine neue NamedQuery in meiner Result-Entity,
+     welche den Fahrer des gesuchten Rennens an der 1.Position zurückgibt.
+[source,java]
+----
+    @NamedQuery(
+            name = "Result.getWinner",
+            query = "select r.driver from Result r where r.race = :RACE and r.position = 1"
+    )
+----
+
+* ResultsEndpoint.java
+  ** Zuerst suche ich das Rennen aus der Datenbank,
+     welches in dem übergebenem Land stattgefunden hat.
+  ** Danach ermittle ich mit der NamedQuery aus der Result-Class den Sieger des Rennens.
+  ** Als Rückgabewert gebe ich einen Response mit dem Sieger zurück.
+[source,java]
+----
+    @GET
+    @Path("winner/{country}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response findWinnerOfRace(@PathParam("country") String country) {
+        Race race = em
+                .createNamedQuery("Race.findByCountry", Race.class)
+                .setParameter("COUNTRY", country)
+                .getSingleResult();
+
+        Driver winner = em
+                .createNamedQuery("Result.getWinner", Driver.class)
+                .setParameter("RACE", race)
+                .getSingleResult();
+
+        return Response.ok(winner).build();
+    }
+----
 ### Aufgabe 5: Liste der Rennen, die ein Team gewonnen hat
 ### Aufgabe 6(für Spezialisten): Liste aller Fahrer mit ihren Punkten
 
