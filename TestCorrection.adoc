@@ -205,6 +205,75 @@
         return Response.ok(winner).build();
     }
 ----
+
 ### Aufgabe 5: Liste der Rennen, die ein Team gewonnen hat
+* Driver.java:
+  ** Um eine Liste aller gewonnen Rennen eines Teams zu erstellen,
+     benötige ich zuerst alle Fahrer, welche für dieses Team fahren.
+     Dazu habe ich eine NamedQuery erstellt, welche mir die Fahrer eines Teams
+     aus der Datenbank ausliest.
+[source,java]
+----
+    @NamedQuery(
+            name = "Driver.findByTeam",
+            query = "select d from Driver d where d.team = :TEAM"
+    )
+----
+
+* Result.java:
+  ** Außerdem benötige ich aus der Results-Tabelle die gewonnen Rennen
+     eines jeden Fahrers, der für das Team fährt.
+     Auch dafür habe ich eine NamedQuery erstellt.
+[source,java]
+----
+    @NamedQuery(
+        name = "Result.getWonRacesOfTeam",
+        query = "select r.race from Result r where r.driver = :DRIVER and r.position = 1"
+    )
+----
+
+* ResultsEndpoint.java:
+  ** Zuerst hole ich mir das Team, welches an die Methode übergeben wird,
+     aus der Datenbank und speichere es auf die Variable team.
+  ** Danach erstelle ich eine Liste mit allen Fahrern dieses Teams.
+  ** Dann erstelle ich eine Liste für die gewonnen Rennen des Teams
+     und eine für die gewonnen Rennen des aktuellen Fahrers.
+  ** Danach gehe ich in einer forEach-Schleife die Fahrer des Teams durch und
+     speichere ihre Siege. Diese speichere ich dann in die Liste der Teamsiege.
+  ** Die Methode gibt die Liste aller Siege des Teams zurück.
+[source,java]
+----
+    @GET
+    @Path("raceswon")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Race> racesWonByTeam(@QueryParam("team") String teamName){
+        Team team = em
+                .createNamedQuery("Team.findByName", Team.class)
+                .setParameter("NAME", teamName)
+                .getSingleResult();
+
+        List<Driver> drivers = em
+                .createNamedQuery("Driver.findByTeam", Driver.class)
+                .setParameter("TEAM", team)
+                .getResultList();
+
+        List<Race> wonRaces = new LinkedList<>();
+        List<Race> wonRaceOfDriver;
+
+        for (Driver driver : drivers) {
+            wonRaceOfDriver = em
+                    .createNamedQuery("Result.getWonRacesOfTeam", Race.class)
+                    .setParameter("DRIVER", driver)
+                    .getResultList();
+
+            for (Race race : wonRaceOfDriver) {
+                wonRaces.add(race);
+            }
+
+        }
+        return wonRaces;
+    }
+----
+
 ### Aufgabe 6(für Spezialisten): Liste aller Fahrer mit ihren Punkten
 
